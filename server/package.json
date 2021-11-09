@@ -28,6 +28,7 @@
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.1.2",
+    "@nestjs/serve-static": "^2.2.2",
     "@nestjs/swagger": "^5.1.4",
     "@prisma/client": "^3.4.1",
     "date-fns": "^2.25.0",
@@ -37,15 +38,16 @@
     "pug": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.6",
+    "rxjs": "^7.4.0",
     "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
     "@nestjs/schematics": "^7.3.0",
-    "@nestjs/testing": "^7.6.15",
+    "@nestjs/testing": "^8.2.0",
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.22",
+    "@types/multer": "^1.4.7",
     "@types/node": "^14.14.36",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
@@ -69,6 +71,9 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "jest": {
+    "setupFiles": [
+      "../jest/setEnvVars.js"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
@@ -82,6 +87,9 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1"
+    },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   }

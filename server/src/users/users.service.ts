@@ -1,21 +1,19 @@
 import {
-  forwardRef,
-  Inject,
   Injectable,
   Logger,
   PreconditionFailedException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { UniqueKey } from '@prisma/client';
 import { CryptographyService } from 'src/cryptography/cryptography.service';
 import { EmailService } from 'src/email/email.service';
 import { UserNotFoundException } from 'src/exceptions';
-import { PrismaService } from 'src/prisma/prisma.service';
-
-import { Prisma, User } from '.prisma/client';
-import { UniqueKey } from '@prisma/client';
 import { EXPIRATION_DELTA_KEY } from 'src/parameter/constants';
 import { ParameterService } from 'src/parameter/parameter.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { UniqueKeyService } from 'src/unique-key/unique-key.service';
+
+import { Prisma, User } from '.prisma/client';
 
 @Injectable()
 export class UsersService {

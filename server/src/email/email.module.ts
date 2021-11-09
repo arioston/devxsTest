@@ -1,12 +1,12 @@
 import { MailerModule } from '@nestjs-modules/mailer';
-import { forwardRef, Module } from '@nestjs/common';
-import { UsersModule } from 'src/users/users.module';
-import { EmailService } from './email.service';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { ParameterModule } from 'src/parameter/parameter.module';
 import { UniqueKeyModule } from 'src/unique-key/unique-key.module';
-import { ConfigModule } from '@nestjs/config';
+
+import { EmailService } from './email.service';
 
 @Module({
   imports: [

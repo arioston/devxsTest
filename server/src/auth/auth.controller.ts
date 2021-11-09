@@ -7,11 +7,10 @@ import {
   Logger,
   Param,
   Post,
-  Res,
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Response } from 'express';
 import { UsersService } from 'src/users/users.service';
+
 import { AuthService } from './auth.service';
 import {
   CreateUserDto,

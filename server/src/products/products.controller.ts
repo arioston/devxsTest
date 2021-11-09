@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -40,11 +41,14 @@ export class ProductsController {
   }
 
   @Get()
-  findAll(@Req() request: Request) {
+  findAll(
+    @Query('filterDeleted') filterDeleted = true,
+    @Req() request: Request,
+  ) {
     const user = request.user;
     return user.role === Role.Guest
-      ? this.productsService.findAll()
-      : this.productsService.findAllByUser(user.id);
+      ? this.productsService.findAllByUser(user.id, filterDeleted)
+      : this.productsService.findAll(filterDeleted);
   }
 
   @Get(':id')
