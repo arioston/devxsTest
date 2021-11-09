@@ -15,7 +15,7 @@ export const EmailVerification = () => {
         .then((res) => navigate("/home", { replace: true }))
         .catch(() => navigate("/login", { replace: true }));
     }
-  }, [key]);
+  }, [auth, key, navigate]);
 
   return null;
 };

@@ -37,6 +37,6 @@ export const keyValidationRequest = async (key: string) => {
 };
 
 export const sendEmailRequest = async (email: string) => {
-  const response = await api.post<void>("/auth/send-email", { email });
+  await api.post<void>("/auth/send-email", { email });
   return;
 };

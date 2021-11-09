@@ -7,6 +7,7 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { EmailVerification } from "../EmailVerification";
+import { Home } from "../Home";
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
   const auth = useAuth();
@@ -27,16 +28,16 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/email/checked/:key" element={<EmailVerification />} />
         <Route
-          path="/"
+          path="*"
           element={
             <RequireAuth>
-              <Route path="/" element={<h1>Home</h1>} />
+              <Home />
             </RequireAuth>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/email/checked/:key" element={<EmailVerification />} />
       </Routes>
       <ToastContainer />
     </>

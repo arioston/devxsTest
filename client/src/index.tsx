@@ -5,7 +5,7 @@ import App from "./components/App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import AxiosProvider from "./services/api";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { AuthProvider } from "./context/Auth";
 
 const queryClient = new QueryClient();
@@ -18,6 +18,7 @@ ReactDOM.render(
           <App />
         </BrowserRouter>
       </AuthProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")

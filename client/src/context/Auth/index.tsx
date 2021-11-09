@@ -27,21 +27,35 @@ export interface AuthContextType {
   sendEmail: (email: string) => Promise<void>;
 }
 
+let tokenChangeFlag = 1;
+
 export const TOKEN_KEY = "@devx-Token";
 
-export const setToken = (token?: string) =>
-  token && localStorage.setItem(TOKEN_KEY, token);
+export const setToken = (token?: string) => {
+  if (token) {
+    tokenChangeFlag++;
+    localStorage.setItem(TOKEN_KEY, token);
+  }
+};
+
+export const cleanTokenKey = () => {
+  localStorage.removeItem(TOKEN_KEY);
+  tokenChangeFlag++;
+};
 
 export const getToken = () => localStorage.getItem(TOKEN_KEY);
 
 const AuthContext = React.createContext<AuthContextType>(null!);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const accessTokenRef = React.useRef<string>();
+  const [accessToken, setAccessToken] = React.useState<
+    string | undefined | null
+  >(getToken());
   const [user, setUser] = React.useState<any>(null);
+
   const loginQuery = useMutation(loginRequest, {
     onSuccess: (data) => {
-      accessTokenRef.current = data;
+      setAccessToken(data);
       setToken(data);
     },
   });
@@ -50,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const keyVerificationQuery = useMutation(keyValidationRequest, {
     onSuccess: (data) => {
-      accessTokenRef.current = data;
+      setAccessToken(data);
       setToken(data);
     },
   });
@@ -58,14 +72,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const sendEmailQuery = useMutation(sendEmailRequest);
 
   useEffect(() => {
-    if (accessTokenRef.current) {
-      const user = jwt_decode(accessTokenRef.current);
+    if (accessToken) {
+      const user = jwt_decode(accessToken);
       setUser(user);
     } else {
       setUser(undefined);
       localStorage.removeItem(TOKEN_KEY);
     }
-  }, [accessTokenRef.current]);
+  }, [accessToken, tokenChangeFlag]);
 
   const signin = (email: string, password: string) => {
     return loginQuery.mutateAsync({ email, password });
@@ -84,11 +98,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signout = () => {
-    accessTokenRef.current = undefined;
+    setAccessToken(undefined);
   };
 
-  const isSuccess = loginQuery.isSuccess;
-  const isAuthenticated = isSuccess && !!accessTokenRef.current;
+  const isAuthenticated = !!accessToken;
 
   const value = {
     user,

@@ -1,7 +1,9 @@
 import Axios from "axios";
 import { toast } from "react-toastify";
 
-import { getToken } from "../context/Auth";
+import { cleanTokenKey, getToken } from "../context/Auth";
+
+const defaultErrorMessage = "Something went wrong, please try again.";
 
 const api = Axios.create({
   baseURL: "http://localhost:3001",
@@ -21,8 +23,12 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response) {
-      toast.error(error.response.data.message);
+    toast.error(
+      error.response ? error.response.data.message : defaultErrorMessage
+    );
+
+    if (error.response?.status === 401) {
+      cleanTokenKey();
     }
     throw error;
   }

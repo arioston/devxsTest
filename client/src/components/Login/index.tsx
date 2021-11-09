@@ -1,9 +1,11 @@
-import { Card, Layout, Form as AntdForm } from "antd";
+import "twin.macro";
+
+import { Card, Form as AntdForm, Layout } from "antd";
 import { Field, Form, Formik } from "formik";
-import React, { useState } from "react";
-import { object, string } from "yup";
-import tw from "twin.macro";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { object, string } from "yup";
 
 import { useAuth } from "../../context/Auth";
 
@@ -23,6 +25,7 @@ const SignupSchema = object().shape({
 function Login() {
   const [isSignIn, seIsSignIn] = useState(true);
   const auth = useAuth();
+  const navigate = useNavigate();
 
   const emailSentNotification = () =>
     toast.info(
@@ -35,10 +38,16 @@ function Login() {
     }
   };
 
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      navigate("/home", { replace: true });
+    }
+  }, [auth.user, auth.isAuthenticated, navigate]);
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content tw="flex justify-center items-center">
-        <Card tw="w-1/2">
+        <Card tw="w-1/4">
           <div tw="bg-white dark:bg-gray-800 ">
             <div tw="text-center w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
               <h2 tw="text-3xl font-extrabold text-black dark:text-white sm:text-4xl">
@@ -55,7 +64,7 @@ function Login() {
               isSignIn
                 ? auth.signin(values.email, values.password)
                 : auth
-                    .signup(values.password, values.email, values.name)
+                    .signup(values.name, values.email, values.password)
                     .then(() => emailSentNotification());
               console.log(values);
             }}
@@ -94,16 +103,14 @@ function Login() {
                   <div tw="font-mono text-red-500">{errors.password}</div>
                 )}
                 <div tw="flex justify-between">
-                  <a
-                    href="#"
+                  <button
                     onClick={() => seIsSignIn((prev) => !prev)}
                     tw="font-medium text-indigo-500  rounded-md p-2"
                   >
                     {isSignIn ? "Signup" : "Signin"}
-                  </a>
+                  </button>
                   {!isSignIn && (
-                    <a
-                      href="#"
+                    <button
                       onClick={() => {
                         !values.email &&
                           setTouched({
@@ -114,7 +121,7 @@ function Login() {
                       tw="font-medium text-indigo-500  rounded-md p-2"
                     >
                       Send email
-                    </a>
+                    </button>
                   )}
                 </div>
 
